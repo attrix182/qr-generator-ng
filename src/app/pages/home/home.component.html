@@ -1,0 +1,17 @@
+<section class="container card mt-5">
+  <div class="card-header bg-white">
+    <h4>Generar QR</h4>
+  </div>
+  <div class="col-12 mt-3">
+    <input type="text" [(ngModel)]="url" class="form-control" placeholder="Ingrese link.." />
+  </div>
+
+  <article class="col-12 text-center mt-3 p-4 qr-code">
+    <div class="no-code mb-4" role="status" *ngIf="!url"></div>
+    <div *ngIf="url">
+      <qr-code [value]="url" [size]="200"></qr-code>
+
+      <div class="col-12 mt-2">{{ url }}</div>
+    </div>
+  </article>
+</section>
