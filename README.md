@@ -2,7 +2,7 @@
 
 Despliegue: https://generar-qr.netlify.app/
 
-# Ejecutar en local:
+## Ejecutar en local:
     git clone https://github.com/attrix182/qr-generator-ng.git
     cd qr-generator-ng
     npm i
