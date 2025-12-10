@@ -1,0 +1,71 @@
+<div class="view-mode-card">
+  <div class="view-mode-header">
+    <h1 class="view-mode-title">
+      <svg class="qr-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="5" height="5"></rect>
+        <rect x="16" y="3" width="5" height="5"></rect>
+        <rect x="3" y="16" width="5" height="5"></rect>
+        <line x1="8" y1="8" x2="8" y2="8"></line>
+        <line x1="16" y1="8" x2="16" y2="8"></line>
+        <line x1="8" y1="16" x2="8" y2="16"></line>
+        <line x1="16" y1="16" x2="16" y2="16"></line>
+        <line x1="11" y1="3" x2="11" y2="8"></line>
+        <line x1="11" y1="16" x2="11" y2="21"></line>
+        <line x1="3" y1="11" x2="8" y2="11"></line>
+        <line x1="16" y1="11" x2="21" y2="11"></line>
+      </svg>
+      Contenido del QR
+    </h1>
+    <button class="back-btn" (click)="onGoBack()" type="button" aria-label="Volver">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Volver
+    </button>
+  </div>
+  <div class="view-mode-content">
+    <div class="scanned-content-box">
+      <div class="scanned-text">{{ scannedContent }}</div>
+    </div>
+
+    <div class="view-mode-actions">
+      <button
+        class="copy-btn"
+        (click)="onCopyToClipboard()"
+        type="button"
+        [class.copied]="copySuccess"
+      >
+        <svg *ngIf="!copySuccess" class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <svg *ngIf="copySuccess" class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>{{ copySuccess ? '¡Copiado!' : 'Copiar texto' }}</span>
+      </button>
+
+      <button
+        class="view-qr-btn"
+        (click)="onOpenQRModal()"
+        type="button"
+      >
+        <svg class="qr-icon-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="5" height="5"></rect>
+          <rect x="16" y="3" width="5" height="5"></rect>
+          <rect x="3" y="16" width="5" height="5"></rect>
+          <line x1="8" y1="8" x2="8" y2="8"></line>
+          <line x1="16" y1="8" x2="16" y2="8"></line>
+          <line x1="8" y1="16" x2="8" y2="16"></line>
+          <line x1="16" y1="16" x2="16" y2="16"></line>
+          <line x1="11" y1="3" x2="11" y2="8"></line>
+          <line x1="11" y1="16" x2="11" y2="21"></line>
+          <line x1="3" y1="11" x2="8" y2="11"></line>
+          <line x1="16" y1="11" x2="21" y2="11"></line>
+        </svg>
+        <span>Ver QR</span>
+      </button>
+    </div>
+  </div>
+</div>

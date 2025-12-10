@@ -140,7 +140,13 @@ export class HomeComponent implements OnInit {
     this.closeModal();
   }
 
-  onLinkPositionChange(): void {
+  onAdditionalTextChange(value: string): void {
+    this.additionalText = value;
+    this.saveAdditionalTextToLocalStorage();
+  }
+
+  onLinkPositionChange(value: 'start' | 'end'): void {
+    this.linkPosition = value;
     this.saveLinkPositionToLocalStorage();
   }
 

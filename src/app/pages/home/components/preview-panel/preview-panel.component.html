@@ -1,0 +1,14 @@
+<div class="preview-panel">
+  <div class="preview-header">
+    <h3 class="preview-title">Vista Previa</h3>
+  </div>
+  <div class="preview-content-wrapper" *ngIf="hasContent">
+    <div class="preview-content-full">
+      <div class="preview-section-label">Vista previa completa:</div>
+      <div class="preview-full-text">{{ content }}</div>
+    </div>
+  </div>
+  <div class="preview-empty" *ngIf="!hasContent">
+    <p>Ingresa un URL o texto para ver la vista previa</p>
+  </div>
+</div>

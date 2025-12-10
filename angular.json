@@ -17,7 +17,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/qr-generator",
+            "outputPath": {
+              "base": "dist/qr-generator",
+              "browser": "browser"
+            },
             "index": "src/index.html",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",

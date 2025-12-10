@@ -1,135 +1,19 @@
 <!-- Vista de contenido escaneado desde QR -->
 <div class="qr-generator-container" *ngIf="isViewMode">
-  <div class="qr-card view-mode-card">
-    <div class="view-mode-header">
-      <h1 class="view-mode-title">
-        <svg class="qr-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="5" height="5"></rect>
-          <rect x="16" y="3" width="5" height="5"></rect>
-          <rect x="3" y="16" width="5" height="5"></rect>
-          <line x1="8" y1="8" x2="8" y2="8"></line>
-          <line x1="16" y1="8" x2="16" y2="8"></line>
-          <line x1="8" y1="16" x2="8" y2="16"></line>
-          <line x1="16" y1="16" x2="16" y2="16"></line>
-          <line x1="11" y1="3" x2="11" y2="8"></line>
-          <line x1="11" y1="16" x2="11" y2="21"></line>
-          <line x1="3" y1="11" x2="8" y2="11"></line>
-          <line x1="16" y1="11" x2="21" y2="11"></line>
-        </svg>
-        Contenido del QR
-      </h1>
-      <button class="back-btn" (click)="goBack()" type="button" aria-label="Volver">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        Volver
-      </button>
-    </div>
-    <div class="view-mode-content">
-      <div class="scanned-content-box">
-        <div class="scanned-text">{{ scannedContent }}</div>
-      </div>
+  <app-qr-viewer
+    [scannedContent]="scannedContent"
+    [copySuccess]="copySuccess"
+    (copyToClipboard)="copyToClipboard()"
+    (openQRModal)="openQRModal()"
+    (goBack)="goBack()"
+  ></app-qr-viewer>
 
-      <div class="view-mode-actions">
-        <button
-          class="copy-btn"
-          (click)="copyToClipboard()"
-          type="button"
-          [class.copied]="copySuccess"
-        >
-          <svg *ngIf="!copySuccess" class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <svg *ngIf="copySuccess" class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span>{{ copySuccess ? '¡Copiado!' : 'Copiar texto' }}</span>
-        </button>
-
-        <button
-          class="view-qr-btn"
-          (click)="openQRModal()"
-          type="button"
-        >
-          <svg class="qr-icon-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="5" height="5"></rect>
-            <rect x="16" y="3" width="5" height="5"></rect>
-            <rect x="3" y="16" width="5" height="5"></rect>
-            <line x1="8" y1="8" x2="8" y2="8"></line>
-            <line x1="16" y1="8" x2="16" y2="8"></line>
-            <line x1="8" y1="16" x2="8" y2="16"></line>
-            <line x1="16" y1="16" x2="16" y2="16"></line>
-            <line x1="11" y1="3" x2="11" y2="8"></line>
-            <line x1="11" y1="16" x2="11" y2="21"></line>
-            <line x1="3" y1="11" x2="8" y2="11"></line>
-            <line x1="16" y1="11" x2="21" y2="11"></line>
-          </svg>
-          <span>Ver QR</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal de QR escaneado -->
-  <div class="modal-overlay" *ngIf="showQRModal" (click)="closeQRModal()">
-    <div class="modal-content qr-modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2 class="modal-title">
-          <svg class="modal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="5" height="5"></rect>
-            <rect x="16" y="3" width="5" height="5"></rect>
-            <rect x="3" y="16" width="5" height="5"></rect>
-            <line x1="8" y1="8" x2="8" y2="8"></line>
-            <line x1="16" y1="8" x2="16" y2="8"></line>
-            <line x1="8" y1="16" x2="8" y2="16"></line>
-            <line x1="16" y1="16" x2="16" y2="16"></line>
-            <line x1="11" y1="3" x2="11" y2="8"></line>
-            <line x1="11" y1="16" x2="11" y2="21"></line>
-            <line x1="3" y1="11" x2="8" y2="11"></line>
-            <line x1="16" y1="11" x2="21" y2="11"></line>
-          </svg>
-          Código QR
-        </h2>
-        <button class="modal-close" (click)="closeQRModal()" type="button" aria-label="Cerrar">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-
-      <div class="modal-body qr-modal-body">
-        <div class="qr-modal-wrapper">
-          <div class="qr-code-container qr-modal-container">
-            <qrcode
-              [qrdata]="scannedContentForQR"
-              [width]="320"
-              [errorCorrectionLevel]="'H'"
-              [colorDark]="'#1a1a1a'"
-              [colorLight]="'#ffffff'"
-              [cssClass]="'qr-code-element'"
-              [allowEmptyString]="false"
-            ></qrcode>
-          </div>
-          <p class="qr-modal-hint">QR con el contenido original</p>
-        </div>
-      </div>
-
-      <div class="modal-footer qr-modal-footer">
-        <button class="btn-secondary" (click)="closeQRModal()" type="button">Cerrar</button>
-        <button class="btn-primary download-btn" (click)="downloadQR()" type="button">
-          <svg class="download-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          Descargar QR
-        </button>
-      </div>
-    </div>
-  </div>
+  <app-qr-display-modal
+    [show]="showQRModal"
+    [content]="scannedContentForQR"
+    (close)="closeQRModal()"
+    (download)="downloadQR()"
+  ></app-qr-display-modal>
 </div>
 
 <!-- Vista normal del generador -->
@@ -173,184 +57,34 @@
     <div class="two-columns-layout">
       <!-- Columna izquierda: Input y QR -->
       <div class="left-column">
-        <div class="qr-input-container">
-          <div class="input-wrapper">
-            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <input
-              type="text"
-              [(ngModel)]="url"
-              (ngModelChange)="onUrlChange()"
-              class="qr-input"
-              placeholder="Ingresa texto, URL o cualquier contenido..."
-              autofocus
-            />
-            <button
-              *ngIf="url"
-              class="clear-btn"
-              (click)="clearUrl()"
-              type="button"
-              aria-label="Limpiar"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div class="qr-display-container">
-          <div class="qr-placeholder" *ngIf="!url">
-            <svg class="placeholder-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="3" y="3" width="5" height="5"></rect>
-              <rect x="16" y="3" width="5" height="5"></rect>
-              <rect x="3" y="16" width="5" height="5"></rect>
-              <line x1="8" y1="8" x2="8" y2="8"></line>
-              <line x1="16" y1="8" x2="16" y2="8"></line>
-              <line x1="8" y1="16" x2="8" y2="16"></line>
-              <line x1="16" y1="16" x2="16" y2="16"></line>
-              <line x1="11" y1="3" x2="11" y2="8"></line>
-              <line x1="11" y1="16" x2="11" y2="21"></line>
-              <line x1="3" y1="11" x2="8" y2="11"></line>
-              <line x1="16" y1="11" x2="21" y2="11"></line>
-            </svg>
-            <p class="placeholder-text">Tu código QR aparecerá aquí</p>
-          </div>
-
-          <div class="qr-code-wrapper" *ngIf="url">
-            <div class="qr-code-container">
-              <qrcode
-                [qrdata]="fullContent"
-                [width]="240"
-                [errorCorrectionLevel]="'H'"
-                [colorDark]="'#1a1a1a'"
-                [colorLight]="'#ffffff'"
-                [cssClass]="'qr-code-element'"
-                [allowEmptyString]="false"
-              ></qrcode>
-            </div>
-            <p class="qr-hint">Escanea este código QR con tu dispositivo móvil</p>
-            <p class="qr-hint-info" *ngIf="additionalText">
-              <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-              </svg>
-              <span class="hint-text">
-                Al escanear este QR, se abrirá esta página con el contenido completo y un botón para copiarlo
-              </span>
-            </p>
-          </div>
-        </div>
+        <app-qr-generator
+          [url]="url"
+          [fullContent]="fullContent"
+          [hasAdditionalText]="!!additionalText"
+          (urlChange)="onUrlChange($event)"
+          (clearUrl)="clearUrl()"
+        ></app-qr-generator>
       </div>
 
       <!-- Columna derecha: Vista previa -->
       <div class="right-column">
-        <div class="preview-panel">
-          <div class="preview-header">
-            <h3 class="preview-title">Vista Previa</h3>
-          </div>
-          <div class="preview-content-wrapper" *ngIf="url || additionalText">
-            <div class="preview-content-full">
-              <div class="preview-section-label">Vista previa completa:</div>
-              <div class="preview-full-text">{{ actualContent }}</div>
-            </div>
-          </div>
-          <div class="preview-empty" *ngIf="!url && !additionalText">
-            <p>Ingresa un URL o texto para ver la vista previa</p>
-          </div>
-        </div>
+        <app-preview-panel
+          [content]="actualContent"
+          [hasContent]="!!(url || additionalText)"
+        ></app-preview-panel>
       </div>
     </div>
   </div>
 
-  <!-- Modal de configuración -->
-  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2 class="modal-title">
-          <svg class="modal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243m-4.242 0L5.636 17.364m12.728 0l-4.243-4.243m-4.242 0L5.636 6.636"></path>
-          </svg>
-          Texto Adicional
-        </h2>
-        <button class="modal-close" (click)="closeModal()" type="button" aria-label="Cerrar">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <p class="modal-description">
-          Agrega texto adicional y elige dónde aparecerá el link en el código QR.
-        </p>
-
-        <div class="position-selector-wrapper">
-          <label class="position-label">Posición del link:</label>
-          <div class="position-options">
-            <label class="position-option">
-              <input
-                type="radio"
-                name="linkPosition"
-                [value]="'start'"
-                [(ngModel)]="linkPosition"
-                (change)="onLinkPositionChange()"
-              />
-              <span class="radio-custom"></span>
-              <span class="option-text">Al inicio</span>
-            </label>
-            <label class="position-option">
-              <input
-                type="radio"
-                name="linkPosition"
-                [value]="'end'"
-                [(ngModel)]="linkPosition"
-                (change)="onLinkPositionChange()"
-              />
-              <span class="radio-custom"></span>
-              <span class="option-text">Al final</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="textarea-wrapper">
-          <textarea
-            [(ngModel)]="additionalText"
-            (ngModelChange)="saveAdditionalTextToLocalStorage()"
-            class="modal-textarea"
-            placeholder="Ejemplo:&#10;&#10;Por favor no olvide informar su asistencia aquí:&#10;https://docs.google.com/forms/..."
-            rows="8"
-          ></textarea>
-          <div class="textarea-footer">
-            <span class="char-count">{{ additionalText.length }} caracteres</span>
-            <button
-              *ngIf="additionalText"
-              class="clear-text-btn"
-              (click)="clearAdditionalText()"
-              type="button"
-            >
-              Limpiar
-            </button>
-          </div>
-        </div>
-
-        <div class="preview-section" *ngIf="url">
-          <div class="preview-label">Vista previa completa:</div>
-          <div class="preview-box">
-            <div class="preview-line">{{ actualContent }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn-secondary" (click)="closeModal()" type="button">Cancelar</button>
-        <button class="btn-primary" (click)="saveAdditionalText()" type="button">Guardar</button>
-      </div>
-    </div>
-  </div>
+  <app-settings-modal
+    [show]="showModal"
+    [additionalText]="additionalText"
+    [linkPosition]="linkPosition"
+    [url]="url"
+    [actualContent]="actualContent"
+    (close)="closeModal()"
+    (additionalTextChange)="onAdditionalTextChange($event)"
+    (linkPositionChange)="onLinkPositionChange($event)"
+    (clearAdditionalText)="clearAdditionalText()"
+  ></app-settings-modal>
 </div>

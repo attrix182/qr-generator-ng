@@ -1,0 +1,86 @@
+<div class="modal-overlay" *ngIf="show" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <svg class="modal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243m-4.242 0L5.636 17.364m12.728 0l-4.243-4.243m-4.242 0L5.636 6.636"></path>
+        </svg>
+        Texto Adicional
+      </h2>
+      <button class="modal-close" (click)="onClose()" type="button" aria-label="Cerrar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-description">
+        Agrega texto adicional y elige dónde aparecerá el link en el código QR.
+      </p>
+
+      <div class="position-selector-wrapper">
+        <label class="position-label">Posición del link:</label>
+        <div class="position-options">
+          <label class="position-option">
+            <input
+              type="radio"
+              name="linkPosition"
+              [value]="'start'"
+              [checked]="linkPosition === 'start'"
+              (change)="onLinkPositionChange('start')"
+            />
+            <span class="radio-custom"></span>
+            <span class="option-text">Al inicio</span>
+          </label>
+          <label class="position-option">
+            <input
+              type="radio"
+              name="linkPosition"
+              [value]="'end'"
+              [checked]="linkPosition === 'end'"
+              (change)="onLinkPositionChange('end')"
+            />
+            <span class="radio-custom"></span>
+            <span class="option-text">Al final</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="textarea-wrapper">
+        <textarea
+          [value]="additionalText"
+          (input)="onAdditionalTextChange($any($event.target).value)"
+          class="modal-textarea"
+          placeholder="Ejemplo:&#10;&#10;Por favor no olvide informar su asistencia aquí:&#10;https://docs.google.com/forms/..."
+          rows="8"
+        ></textarea>
+        <div class="textarea-footer">
+          <span class="char-count">{{ additionalText.length }} caracteres</span>
+          <button
+            *ngIf="additionalText"
+            class="clear-text-btn"
+            (click)="onClearAdditionalText()"
+            type="button"
+          >
+            Limpiar
+          </button>
+        </div>
+      </div>
+
+      <div class="preview-section" *ngIf="url">
+        <div class="preview-label">Vista previa completa:</div>
+        <div class="preview-box">
+          <div class="preview-line">{{ actualContent }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="onClose()" type="button">Cancelar</button>
+      <button class="btn-primary" (click)="onClose()" type="button">Guardar</button>
+    </div>
+  </div>
+</div>
