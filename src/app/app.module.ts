@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { QRCodeModule } from 'angular2-qrcode';
+import { QRCodeComponent } from 'angularx-qrcode';
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './pages/home/home.component';
 
@@ -15,7 +15,7 @@ import { HomeComponent } from './pages/home/home.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    QRCodeModule,
+    QRCodeComponent,
     FormsModule
 
   ],

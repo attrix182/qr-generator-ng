@@ -1,16 +1,252 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  standalone: false
 })
 export class HomeComponent implements OnInit {
 
-  public url:string;
-  constructor() { }
+  public url: string = '';
+  public additionalText: string = '';
+  public showModal: boolean = false;
+  public linkPosition: 'start' | 'end' = 'start';
+  public scannedContent: string = '';
+  public isViewMode: boolean = false;
+  public copySuccess: boolean = false;
+  public showQRModal: boolean = false;
+
+  private readonly STORAGE_KEY_URL = 'qr-generator-url';
+  private readonly STORAGE_KEY_ADDITIONAL_TEXT = 'qr-generator-additional-text';
+  private readonly STORAGE_KEY_LINK_POSITION = 'qr-generator-link-position';
+  private urlSaveTimeout: any;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location
+  ) { }
 
   ngOnInit(): void {
+    // Verificar si hay un query parameter (modo vista de QR escaneado)
+    this.route.queryParams.subscribe(params => {
+      if (params['content']) {
+        this.scannedContent = decodeURIComponent(params['content']);
+        this.isViewMode = true;
+      } else {
+        // Cargar datos del localStorage solo si no estamos en modo vista
+        this.loadFromLocalStorage();
+      }
+    });
+  }
+
+  // Contenido real que se mostrará cuando se escanee el QR
+  get actualContent(): string {
+    if (!this.url) return '';
+    if (!this.additionalText) return this.url;
+
+    if (this.linkPosition === 'start') {
+      return `${this.url}\n\n${this.additionalText}`;
+    } else {
+      return `${this.additionalText}\n\n${this.url}`;
+    }
+  }
+
+  // URL que se codificará en el QR (apunta a esta misma página con el contenido como query param)
+  get fullContent(): string {
+    if (!this.url) return '';
+
+    // Si no hay texto adicional, devolvemos el URL directamente
+    if (!this.additionalText) return this.url;
+
+    // Generamos la URL completa con el contenido como query parameter
+    const content = this.actualContent;
+    const encodedContent = encodeURIComponent(content);
+    const baseUrl = window.location.origin + window.location.pathname;
+    return `${baseUrl}?content=${encodedContent}`;
+  }
+
+  private loadFromLocalStorage(): void {
+    try {
+      const savedUrl = localStorage.getItem(this.STORAGE_KEY_URL);
+      const savedAdditionalText = localStorage.getItem(this.STORAGE_KEY_ADDITIONAL_TEXT);
+      const savedLinkPosition = localStorage.getItem(this.STORAGE_KEY_LINK_POSITION);
+
+      if (savedUrl) {
+        this.url = savedUrl;
+      }
+
+      if (savedAdditionalText) {
+        this.additionalText = savedAdditionalText;
+      }
+
+      if (savedLinkPosition === 'start' || savedLinkPosition === 'end') {
+        this.linkPosition = savedLinkPosition;
+      }
+    } catch (error) {
+      console.warn('Error al cargar del localStorage:', error);
+    }
+  }
+
+  onUrlChange(): void {
+    // Guardar URL con debounce para evitar guardar en cada tecla
+    if (this.urlSaveTimeout) {
+      clearTimeout(this.urlSaveTimeout);
+    }
+
+    this.urlSaveTimeout = setTimeout(() => {
+      this.saveUrlToLocalStorage();
+    }, 500);
+  }
+
+  private saveUrlToLocalStorage(): void {
+    try {
+      if (this.url) {
+        localStorage.setItem(this.STORAGE_KEY_URL, this.url);
+      } else {
+        localStorage.removeItem(this.STORAGE_KEY_URL);
+      }
+    } catch (error) {
+      console.warn('Error al guardar URL en localStorage:', error);
+    }
+  }
+
+  saveAdditionalTextToLocalStorage(): void {
+    try {
+      if (this.additionalText) {
+        localStorage.setItem(this.STORAGE_KEY_ADDITIONAL_TEXT, this.additionalText);
+      } else {
+        localStorage.removeItem(this.STORAGE_KEY_ADDITIONAL_TEXT);
+      }
+    } catch (error) {
+      console.warn('Error al guardar texto adicional en localStorage:', error);
+    }
+  }
+
+  openModal(): void {
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+  }
+
+  saveAdditionalText(): void {
+    this.saveAdditionalTextToLocalStorage();
+    this.saveLinkPositionToLocalStorage();
+    this.closeModal();
+  }
+
+  onLinkPositionChange(): void {
+    this.saveLinkPositionToLocalStorage();
+  }
+
+  private saveLinkPositionToLocalStorage(): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY_LINK_POSITION, this.linkPosition);
+    } catch (error) {
+      console.warn('Error al guardar posición del link en localStorage:', error);
+    }
+  }
+
+  clearAdditionalText(): void {
+    this.additionalText = '';
+    try {
+      localStorage.removeItem(this.STORAGE_KEY_ADDITIONAL_TEXT);
+    } catch (error) {
+      console.warn('Error al limpiar localStorage:', error);
+    }
+  }
+
+  clearUrl(): void {
+    this.url = '';
+    try {
+      localStorage.removeItem(this.STORAGE_KEY_URL);
+    } catch (error) {
+      console.warn('Error al limpiar URL del localStorage:', error);
+    }
+  }
+
+  copyToClipboard(): void {
+    const contentToCopy = this.scannedContent || this.actualContent;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(contentToCopy).then(() => {
+        this.copySuccess = true;
+        setTimeout(() => {
+          this.copySuccess = false;
+        }, 2000);
+      }).catch(err => {
+        console.error('Error al copiar:', err);
+        this.fallbackCopyToClipboard(contentToCopy);
+      });
+    } else {
+      this.fallbackCopyToClipboard(contentToCopy);
+    }
+  }
+
+  private fallbackCopyToClipboard(text: string): void {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      document.execCommand('copy');
+      this.copySuccess = true;
+      setTimeout(() => {
+        this.copySuccess = false;
+      }, 2000);
+    } catch (err) {
+      console.error('Error al copiar:', err);
+    }
+
+    document.body.removeChild(textArea);
+  }
+
+  goBack(): void {
+    this.router.navigate(['/'], { replaceUrl: true });
+    this.isViewMode = false;
+    this.scannedContent = '';
+    this.showQRModal = false;
+  }
+
+  openQRModal(): void {
+    this.showQRModal = true;
+  }
+
+  closeQRModal(): void {
+    this.showQRModal = false;
+  }
+
+  get scannedContentForQR(): string {
+    return this.scannedContent;
+  }
+
+  downloadQR(): void {
+    // Buscar el elemento canvas del QR dentro del modal
+    setTimeout(() => {
+      const modal = document.querySelector('.qr-modal-content');
+      const canvas = modal?.querySelector('canvas') as HTMLCanvasElement;
+      if (canvas) {
+        // Crear un enlace de descarga
+        const link = document.createElement('a');
+        link.download = 'qr-code.png';
+        link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        console.error('No se pudo encontrar el canvas del QR');
+      }
+    }, 200);
   }
 
 }
