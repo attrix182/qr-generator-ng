@@ -6,14 +6,14 @@
       </svg>
       <input
         type="text"
-        [value]="url"
-        (input)="onUrlChange($any($event.target).value)"
+        [(ngModel)]="localUrl"
+        (ngModelChange)="onUrlChange($event)"
         class="qr-input"
         placeholder="Ingresa texto, URL o cualquier contenido..."
         autofocus
       />
       <button
-        *ngIf="url"
+        *ngIf="localUrl"
         class="clear-btn"
         (click)="onClearUrl()"
         type="button"
@@ -28,7 +28,7 @@
   </div>
 
   <div class="qr-display-container">
-    <div class="qr-placeholder" *ngIf="!url">
+    <div class="qr-placeholder" *ngIf="!localUrl">
       <svg class="placeholder-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <rect x="3" y="3" width="5" height="5"></rect>
         <rect x="16" y="3" width="5" height="5"></rect>
@@ -45,7 +45,7 @@
       <p class="placeholder-text">Tu código QR aparecerá aquí</p>
     </div>
 
-    <div class="qr-code-wrapper" *ngIf="url">
+    <div class="qr-code-wrapper" *ngIf="localUrl">
       <div class="qr-code-container">
         <qrcode
           [qrdata]="fullContent"

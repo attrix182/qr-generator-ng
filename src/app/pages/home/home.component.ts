@@ -63,10 +63,12 @@ export class HomeComponent implements OnInit {
     if (!this.additionalText) return this.url;
 
     // Generamos la URL completa con el contenido como query parameter
+    // Usamos hash location para compatibilidad con Netlify
     const content = this.actualContent;
     const encodedContent = encodeURIComponent(content);
-    const baseUrl = window.location.origin + window.location.pathname;
-    return `${baseUrl}?content=${encodedContent}`;
+    const baseUrl = window.location.origin;
+    // Con HashLocationStrategy, la ruta va después del hash
+    return `${baseUrl}/#/?content=${encodedContent}`;
   }
 
   private loadFromLocalStorage(): void {
@@ -91,7 +93,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onUrlChange(): void {
+  onUrlChange(value: string): void {
+    // Actualizar inmediatamente para que el QR se genere en tiempo real
+    this.url = value;
+
     // Guardar URL con debounce para evitar guardar en cada tecla
     if (this.urlSaveTimeout) {
       clearTimeout(this.urlSaveTimeout);

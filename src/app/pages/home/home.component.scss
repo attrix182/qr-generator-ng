@@ -84,7 +84,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
   color: #6b7280;
   position: relative;
 
@@ -99,7 +99,7 @@
     .tooltip {
       opacity: 1;
       visibility: visible;
-      transform: translateY(0);
+      transform: translateX(-50%) translateY(0);
     }
   }
 
@@ -107,6 +107,7 @@
     width: 20px;
     height: 20px;
     transition: transform 0.3s ease;
+    transform-origin: center center;
   }
 }
 
@@ -123,10 +124,11 @@
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
   pointer-events: none;
   z-index: 1000;
   font-weight: 500;
+  transform-origin: bottom center;
 
   &::after {
     content: '';
