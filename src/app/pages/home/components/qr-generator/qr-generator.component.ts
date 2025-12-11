@@ -30,4 +30,21 @@ export class QrGeneratorComponent implements OnChanges {
     this.localUrl = '';
     this.clearUrl.emit();
   }
+
+  onQRClick(): void {
+    if (this.fullContent) {
+      // Si el contenido es una URL (empieza con http:// o https://), abrirla
+      if (this.fullContent.startsWith('http://') || this.fullContent.startsWith('https://')) {
+        window.open(this.fullContent, '_blank');
+      } else {
+        // Si no es una URL directa, intentar abrirla de todas formas
+        // (podría ser una URL generada con query params)
+        try {
+          window.open(this.fullContent, '_blank');
+        } catch (error) {
+          console.error('Error al abrir el enlace:', error);
+        }
+      }
+    }
+  }
 }

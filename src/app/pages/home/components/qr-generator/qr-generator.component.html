@@ -46,7 +46,7 @@
     </div>
 
     <div class="qr-code-wrapper" *ngIf="localUrl">
-      <div class="qr-code-container">
+      <div class="qr-code-container" (click)="onQRClick()" [class.clickable]="fullContent && (fullContent.startsWith('http://') || fullContent.startsWith('https://'))">
         <qrcode
           [qrdata]="fullContent"
           [width]="240"

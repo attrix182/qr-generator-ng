@@ -3,11 +3,13 @@
   border-radius: 16px;
   border: 2px solid #e5e7eb;
   padding: 1.5rem;
-  height: 100%;
   display: flex;
   flex-direction: column;
   min-height: 0;
   box-sizing: border-box;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .preview-header {
@@ -24,10 +26,11 @@
 
 .preview-content-wrapper {
   flex: 1;
-  overflow-y: auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .preview-content-full {
@@ -36,6 +39,12 @@
   gap: 0.75rem;
   flex: 1;
   min-height: 0;
+}
+
+@media (max-width: 640px) {
+  .preview-content-full {
+    gap: 0.5rem;
+  }
 }
 
 .preview-section-label {
@@ -57,10 +66,6 @@
   background: #ffffff;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  max-height: 100%;
   box-sizing: border-box;
 }
 
@@ -76,14 +81,93 @@
   padding: 2rem;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .preview-panel {
     padding: 1rem;
   }
-  
+
+  .preview-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .preview-title {
+    font-size: 1rem;
+  }
+
+  .preview-section-label {
+    font-size: 0.6875rem;
+  }
+
   .preview-full-text {
+    font-size: 0.8125rem;
     padding: 0.75rem;
-    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .preview-empty {
+    min-height: 120px;
+    padding: 1.5rem;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .preview-panel {
+    padding: 0.75rem;
+  }
+
+  .preview-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .preview-title {
+    font-size: 0.875rem;
+  }
+
+  .preview-section-label {
+    font-size: 0.625rem;
+  }
+
+  .preview-full-text {
+    padding: 0.625rem;
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .preview-empty {
+    min-height: 100px;
+    padding: 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .preview-panel {
+    padding: 0.625rem;
+  }
+
+  .preview-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .preview-title {
+    font-size: 0.8125rem;
+  }
+
+  .preview-section-label {
+    font-size: 0.5625rem;
+  }
+
+  .preview-full-text {
+    padding: 0.5rem;
+    font-size: 0.6875rem;
+    line-height: 1.4;
+  }
+
+  .preview-empty {
+    min-height: 80px;
+    padding: 0.75rem;
+    font-size: 0.6875rem;
   }
 }
 
