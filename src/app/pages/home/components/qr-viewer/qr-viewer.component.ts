@@ -24,4 +24,27 @@ export class QrViewerComponent {
   onGoBack(): void {
     this.goBack.emit();
   }
+
+  async onShare(): Promise<void> {
+    if (navigator.share && this.scannedContent) {
+      try {
+        await navigator.share({
+          title: 'Contenido del QR',
+          text: this.scannedContent,
+        });
+      } catch (error) {
+        // El usuario canceló el compartir o hubo un error
+        if ((error as Error).name !== 'AbortError') {
+          console.error('Error al compartir:', error);
+        }
+      }
+    } else {
+      // Fallback: copiar al portapapeles si la API de compartir no está disponible
+      this.onCopyToClipboard();
+    }
+  }
+
+  get canShare(): boolean {
+    return !!navigator.share;
+  }
 }
