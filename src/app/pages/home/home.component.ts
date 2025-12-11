@@ -131,7 +131,7 @@ export class HomeComponent implements OnInit {
     {
       title: 'Ahora es mas facil (Nuevo)',
       selector: '.qr-display-container',
-      content: 'Este QR te llevará a una pagina donde vas a ver un botón para copiar el texto',
+      content: 'Este QR te llevará a una pagina donde vas a ver un botón para copiar o compartir el texto',
       orientation: Orientation.Right
     }
   ];
