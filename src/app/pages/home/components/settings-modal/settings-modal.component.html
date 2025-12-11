@@ -2,10 +2,6 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h2 class="modal-title">
-        <svg class="modal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243m-4.242 0L5.636 17.364m12.728 0l-4.243-4.243m-4.242 0L5.636 6.636"></path>
-        </svg>
         Texto Adicional
       </h2>
       <button class="modal-close" (click)="onClose()" type="button" aria-label="Cerrar">
@@ -54,7 +50,7 @@
           [value]="additionalText"
           (input)="onAdditionalTextChange($any($event.target).value)"
           class="modal-textarea"
-          placeholder="Ejemplo:&#10;&#10;Por favor no olvide informar su asistencia aquí:&#10;https://docs.google.com/forms/..."
+          placeholder="Ejemplo:&#10;&#10;Por favor complete el formulario:&#10;https://docs.google.com/forms/..."
           rows="8"
         ></textarea>
         <div class="textarea-footer">

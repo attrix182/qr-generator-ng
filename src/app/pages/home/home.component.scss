@@ -15,7 +15,7 @@
   background: #ffffff;
   border-radius: 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-width: 1400px;
+  max-width: 1200px;
   width: 100%;
   padding: 2rem;
   animation: slideUp 0.5s ease-out;
@@ -71,15 +71,53 @@
 .header-top {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 1rem;
   position: relative;
   margin-bottom: 0.5rem;
 }
 
+.help-btn {
+  background: #e0e7ff;
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  color: #667eea;
+  position: relative;
+  overflow: visible;
+  flex-shrink: 0;
+
+  &:hover {
+    background: #667eea;
+    color: #ffffff;
+    border-color: #667eea;
+
+    .help-icon {
+      transform: scale(1.1);
+    }
+
+    .tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  .help-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+  }
+}
+
 .settings-btn {
-  position: absolute;
-  right: 0;
   background: #f3f4f6;
   border: none;
   border-radius: 12px;
@@ -93,6 +131,7 @@
   color: #6b7280;
   position: relative;
   overflow: visible;
+  flex-shrink: 0;
 
   &:hover {
     background: #667eea;

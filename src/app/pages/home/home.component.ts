@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { GuidedTour, GuidedTourService, Orientation } from 'ngx-guided-tour';
 
 @Component({
   selector: 'app-home',
@@ -18,16 +19,19 @@ export class HomeComponent implements OnInit {
   public isViewMode: boolean = false;
   public copySuccess: boolean = false;
   public showQRModal: boolean = false;
+  public isMobile: boolean = window.innerWidth < 992;
 
   private readonly STORAGE_KEY_URL = 'qr-generator-url';
   private readonly STORAGE_KEY_ADDITIONAL_TEXT = 'qr-generator-additional-text';
   private readonly STORAGE_KEY_LINK_POSITION = 'qr-generator-link-position';
+  private readonly TOUR_STORAGE_KEY = 'qr-generator-tour-completed';
   private urlSaveTimeout: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private guidedTourService: GuidedTourService
   ) { }
 
   ngOnInit(): void {
@@ -39,9 +43,98 @@ export class HomeComponent implements OnInit {
       } else {
         // Cargar datos del localStorage solo si no estamos en modo vista
         this.loadFromLocalStorage();
+        // Iniciar tour guiado solo en desktop
+        this.initGuidedTour();
       }
     });
   }
+
+  private initGuidedTour(): void {
+    // Solo iniciar el tour en dispositivos desktop (no mobile)
+    if (!this.isMobile && !this.isViewMode) {
+      // Verificar si el usuario ya completó el tour
+      const tourCompleted = localStorage.getItem(this.TOUR_STORAGE_KEY);
+
+      if (!tourCompleted) {
+        // Usar el mismo método pero con delay inicial
+        setTimeout(() => {
+          this.startTourInternal();
+        }, 1000);
+      }
+    }
+  }
+
+  startTour(): void {
+    // Solo iniciar el tour en dispositivos desktop (no mobile)
+    if (this.isMobile || this.isViewMode) {
+      return;
+    }
+
+    // Llamar al método interno directamente
+    // El servicio maneja automáticamente si hay un tour activo
+    this.startTourInternal();
+  }
+
+  private startTourInternal(): void {
+    // Filtrar los pasos basándose en los elementos disponibles en el DOM
+    const availableSteps = this.TOUR_STEPS.filter((step) => {
+      const element = document.querySelector(step.selector);
+      return element !== null;
+    });
+
+    if (availableSteps.length === 0) {
+      // Reintentar después de un tiempo adicional
+      setTimeout(() => this.startTourInternal(), 500);
+      return;
+    }
+
+    const tour: GuidedTour = {
+      tourId: 'qr-generator-tour',
+      useOrb: false,
+      steps: availableSteps,
+      skipCallback: (stepSkippedOn: number) => {
+        console.log(`Tour saltado en el paso ${stepSkippedOn}`);
+        localStorage.setItem(this.TOUR_STORAGE_KEY, 'skipped');
+      },
+      completeCallback: () => {
+        console.log('Tour completado');
+        localStorage.setItem(this.TOUR_STORAGE_KEY, 'completed');
+      }
+    };
+
+    try {
+      this.guidedTourService.startTour(tour);
+    } catch (error) {
+      console.error('[Tour] Error al iniciar el tour:', error);
+    }
+  }
+
+  private readonly TOUR_STEPS = [
+    {
+      title: 'Configuración (Nuevo)',
+      selector: '.settings-btn',
+      content: 'Ingresa para configurar un texto adicional que se agregará antes o despues de la URL',
+      orientation: Orientation.Left
+    },
+    {
+      title: 'Campo de entrada',
+      selector: '.qr-input',
+      content: 'Ingresa el texto o URL que deseas compartir',
+      orientation: Orientation.Bottom
+    },
+    {
+      title: 'Vista Previa',
+      selector: '.preview-panel',
+      content: 'Aquí verás una vista previa del contenido completo que se generará en el QR',
+      orientation: Orientation.Left
+    },
+    {
+      title: 'Ahora es mas facil (Nuevo)',
+      selector: '.qr-display-container',
+      content: 'Este QR te llevará a una pagina donde vas a ver un botón para copiar el texto',
+      orientation: Orientation.Right
+    }
+  ];
 
   // Contenido real que se mostrará cuando se escanee el QR
   get actualContent(): string {
@@ -59,10 +152,8 @@ export class HomeComponent implements OnInit {
   get fullContent(): string {
     if (!this.url) return '';
 
-    // Si no hay texto adicional, devolvemos el URL directamente
-    if (!this.additionalText) return this.url;
-
-    // Generamos la URL completa con el contenido como query parameter
+    // Siempre generamos la URL completa con el contenido como query parameter
+    // para que siempre se abra en modo vista previa
     // Usamos hash location para compatibilidad con Netlify
     const content = this.actualContent;
     const encodedContent = encodeURIComponent(content);

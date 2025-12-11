@@ -11,6 +11,7 @@ import { QrViewerComponent } from './pages/home/components/qr-viewer/qr-viewer.c
 import { SettingsModalComponent } from './pages/home/components/settings-modal/settings-modal.component';
 import { QrDisplayModalComponent } from './pages/home/components/qr-display-modal/qr-display-modal.component';
 import { PreviewPanelComponent } from './pages/home/components/preview-panel/preview-panel.component';
+import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
 
 @NgModule({
   declarations: [
@@ -26,9 +27,12 @@ import { PreviewPanelComponent } from './pages/home/components/preview-panel/pre
     BrowserModule,
     AppRoutingModule,
     QRCodeComponent,
-    FormsModule
+    FormsModule,
+    GuidedTourModule
   ],
-  providers: [],
+  providers: [
+    GuidedTourService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

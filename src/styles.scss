@@ -1,1 +1,92 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'ngx-guided-tour/scss/guided-tour-base-theme.scss';
+
+// Estilos personalizados para el tour guiado (solo desktop)
+@media (min-width: 992px) {
+  // Ocultar el orb (punto violeta) si aparece
+  ngx-guided-tour .tour-orb {
+    display: none !important;
+  }
+
+  .tour-block {
+    border-radius: 16px;
+  }
+
+  ngx-guided-tour .tour-step .tour-buttons .next-button {
+    width: 100%;
+    height: 34px;
+    background: #667eea;
+    color: #ffffff;
+    font-weight: 500;
+    border: none;
+    border-radius: 24px !important;
+    margin-top: 10px;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: -0.2px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: #4968f3;
+    }
+
+    &:active {
+      background: #4968f3;
+    }
+  }
+
+  ngx-guided-tour .tour-step .tour-buttons button.skip-button.link-button {
+    width: 100%;
+    height: 34px;
+    background: #fafafa;
+    color: #1a1a1a;
+    border: 1px solid #e0e0e0;
+    border-radius: 24px !important;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: #f1f1f1;
+    }
+  }
+
+  // Contenedor del contenido
+  ngx-guided-tour .tour-step .tour-content {
+    min-height: 5px;
+  }
+
+  // Título del tour
+  ngx-guided-tour .tour-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px !important;
+    font-weight: 500;
+    color: #1a1a1a;
+    padding-bottom: 8px !important;
+    line-height: 20px;
+  }
+
+  // Contenido del tour
+  ngx-guided-tour .tour-content {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #6b7280;
+    line-height: 18px;
+  }
+
+  // Contenedor del paso del tour
+  ngx-guided-tour .tour-step {
+    border-radius: 16px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  // Ocultar botón de volver
+  .back-button {
+    display: none;
+  }
+}
